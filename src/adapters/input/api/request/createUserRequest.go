@@ -1,4 +1,4 @@
-package requestt
+package request
 
 type CreateUserRequest struct {
 	Username string `json:"username" binding:"required"`

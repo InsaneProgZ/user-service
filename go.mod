@@ -1,4 +1,4 @@
-module planzin/user
+module github.com/InsaneProgZ/user-service
 
 go 1.22.2
 

@@ -1,9 +1,7 @@
 package input
 
-import (
-	"planzin/user/src/application/domain"
-)
+import "github.com/InsaneProgZ/user-service/src/application/domain"
 
 type UserPort interface {
-	CreateUser(c domain.CreateUser)
+	CreateUser(user domain.CreateUser)
 }

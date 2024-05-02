@@ -1,20 +1,20 @@
 package main
 
 import (
-	"planzin/user/src/adapters/input/api"
-
+	"github.com/InsaneProgZ/user-service/src/adapters/input/api"
+	"github.com/InsaneProgZ/user-service/src/application/service"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	router := gin.Default()
 
-	userHandler := api.NewUserController()
+	userHandler := appConfig()
 
 	// Define API routes
 	v1 := router.Group("/v1")
 	{
-		v1.POST("/users", userHandler.CreateUser)
+		v1.POST("/users", userHandler.CreateUsers)
 	}
 	router.Use(gin.Logger())
 	// Run the server
@@ -22,6 +22,7 @@ func main() {
 }
 
 func appConfig() *api.UserController {
-	userHandler := api.NewUserController()
+	userPort := &service.UserService{}
+	userHandler := api.NewUserController(userPort)
 	return userHandler
 }
