@@ -1,28 +1,30 @@
 package main
 
 import (
-	"github.com/InsaneProgZ/user-service/src/adapters/input/api"
-	"github.com/InsaneProgZ/user-service/src/application/service"
+	"github.com/InsaneProgZ/user-service/src/adapters/input/controller"
+	"github.com/InsaneProgZ/user-service/src/domain/service"
 	"github.com/gin-gonic/gin"
+	"github.com/golang/glog"
 )
 
 func main() {
+	defer glog.Flush()
 	router := gin.Default()
 
-	userHandler := appConfig()
+	userController := appConfig()
 
 	// Define API routes
 	v1 := router.Group("/v1")
-	{
-		v1.POST("/users", userHandler.CreateUsers)
-	}
+	v1.POST("/users", userController.CreateUsers)
+	
 	router.Use(gin.Logger())
 	// Run the server
 	router.Run("localhost:8080")
 }
 
-func appConfig() *api.UserController {
-	userPort := &service.UserService{}
-	userHandler := api.NewUserController(userPort)
-	return userHandler
+func appConfig() *controller.UserController {
+	defer glog.Flush()
+	userPort := service.NewUserService()
+	userController := controller.NewUserController(userPort)
+	return userController
 }
