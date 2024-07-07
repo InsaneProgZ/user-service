@@ -1,6 +1,6 @@
-package domain
+package model
 
-type CreateUser struct {
+type User struct {
 	Username string
 	Password string
 	Name     string
