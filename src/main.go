@@ -69,7 +69,7 @@ func main() {
 
 	router.Use(gin.Logger())
 	// Run the server
-	router.Run(":8080")
+	router.Run("localhost:8080")
 }
 
 func appConfig() *controller.UserController {
