@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/InsaneProgZ/user-service/src/domain/model"
-	"github.com/InsaneProgZ/user-service/src/domain/output"
+	"github.com/InsaneProgZ/user-service/src/domain/port/output"
 )
 
 type UserService struct {

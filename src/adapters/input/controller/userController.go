@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/InsaneProgZ/user-service/src/adapters/input/controller/request"
-	"github.com/InsaneProgZ/user-service/src/domain/input"
 	"github.com/InsaneProgZ/user-service/src/domain/model"
+	"github.com/InsaneProgZ/user-service/src/domain/port/input"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/glog"
 )

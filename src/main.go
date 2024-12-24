@@ -13,8 +13,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-var (
-	httpRequestsTotal = prometheus.NewCounterVec(
+func configPrometheus() gin.HandlerFunc {
+	httpRequestsTotal := prometheus.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "http_requests_total",
 			Help: "Total number of HTTP requests",
@@ -22,7 +22,7 @@ var (
 		[]string{"method", "path", "status"},
 	)
 
-	httpRequestDuration = prometheus.NewHistogramVec(
+	httpRequestDuration := prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
 			Name:    "http_request_duration_seconds",
 			Help:    "Duration of HTTP requests in seconds",
@@ -30,16 +30,10 @@ var (
 		},
 		[]string{"method", "path", "status"},
 	)
-)
 
-func init() {
-	// Register the metrics with Prometheus
 	prometheus.MustRegister(httpRequestsTotal)
 	prometheus.MustRegister(httpRequestDuration)
-}
 
-// PrometheusMiddleware records metrics for Prometheus
-func PrometheusMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
 
@@ -55,25 +49,28 @@ func PrometheusMiddleware() gin.HandlerFunc {
 
 func main() {
 	defer glog.Flush()
+	routerConfig()
+}
+
+func routerConfig() {
 	router := gin.Default()
 
-	router.Use(PrometheusMiddleware())
+	router.Use(configPrometheus())
 
 	userController := appConfig()
 
 	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
-	// Defining API routes
+
 	v1 := router.Group("/v1")
 	v1.POST("/users", userController.CreateUsers)
 	v1.GET("/users/:username", userController.FindUser)
 
 	router.Use(gin.Logger())
-	// Run the server
+
 	router.Run("localhost:8080")
 }
 
 func appConfig() *controller.UserController {
-	defer glog.Flush()
 	userRepository := repository.NewUserRepository()
 	userPort := service.NewUserService(userRepository)
 	userController := controller.NewUserController(userPort)
