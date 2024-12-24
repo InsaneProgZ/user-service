@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/InsaneProgZ/user-service/src/adapters/controller"
-	"github.com/InsaneProgZ/user-service/src/adapters/repository"
+	"github.com/InsaneProgZ/user-service/src/adapters/input/controller"
+	"github.com/InsaneProgZ/user-service/src/adapters/output/repository"
 	"github.com/InsaneProgZ/user-service/src/domain/service"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/glog"

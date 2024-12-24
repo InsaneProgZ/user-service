@@ -28,3 +28,12 @@ func (u *UserService) FindUser(username string) (model.User, error) {
 	}
 	return *user, nil
 }
+
+func (u *UserService) ValidateUser(userToValidate model.UserValidate) (bool, error){
+	user := u.UserRepositoryPort.Find(userToValidate.Username)
+	if user == nil {
+		return false, &model.UserError{Message: "User not found."}
+	}
+
+	return user.Password == userToValidate.Password, nil
+}

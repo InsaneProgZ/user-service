@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/InsaneProgZ/user-service/src/adapters/controller/request"
+	"github.com/InsaneProgZ/user-service/src/adapters/input/controller/request"
 	"github.com/InsaneProgZ/user-service/src/domain/input"
 	"github.com/InsaneProgZ/user-service/src/domain/model"
 	"github.com/gin-gonic/gin"
@@ -52,4 +52,27 @@ func (uc *UserController) FindUser(c *gin.Context) {
 	glog.Info("end" + time.Now().GoString())
 
 	c.JSON(http.StatusOK, user)
+}
+
+func (uc *UserController) ValidateUser(c *gin.Context) {
+	var request request.ValidateUserRequest
+	glog.Info("start ValidateUser" + time.Now().GoString())
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	isValid, err := uc.userPort.ValidateUser(model.UserValidate(request))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+	if isValid {
+		c.JSON(http.StatusOK, "Valid Passwords")
+	} else {
+		c.JSON(http.StatusOK, "Invalid Password")
+	}
+
+	glog.Info("end ValidateUser" + time.Now().GoString())
+
 }
